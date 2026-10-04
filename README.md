@@ -255,7 +255,7 @@ Demo logins (seeded, password `AgentCare!2026` for all):
 
 | Role | Email | What you can do |
 |---|---|---|
-| Patient | `asha.menon@example.com` | Submit requests, browse doctors, book/cancel appointments, upload documents, check reminders |
+| Patient | `ayesha.tariq@example.com` | Submit requests, browse doctors, book/cancel appointments, upload documents, check reminders |
 | Staff | `staff@agentcare.local` | Review pending escalations, drill into workflow runs, manage the directory |
 | Admin | `admin@agentcare.local` | Everything staff can, plus creating new staff/admin accounts |
 

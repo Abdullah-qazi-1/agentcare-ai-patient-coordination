@@ -185,7 +185,7 @@ class TestLineage:
             metadata={
                 "tool": "find_available_slots",
                 "args": {"department_name": "Cardiology"},
-                "result": "Open slots in Cardiology: slot_id=1 with Dr. Meera Iyer",
+                "result": "Open slots in Cardiology: slot_id=1 with Dr. Ayesha Malik",
                 "status": "succeeded",
                 "workflow_run_id": run.id,
             },
@@ -196,7 +196,7 @@ class TestLineage:
         body = resp.json()
         assert len(body) == 1
         assert body[0]["step"] == "Checked doctor availability"
-        assert "Dr. Meera Iyer" in body[0]["detail"]
+        assert "Dr. Ayesha Malik" in body[0]["detail"]
 
     def test_patient_cannot_see_another_patients_lineage(self, client, db, patient, other_patient):
         run = _make_run(db, other_patient)

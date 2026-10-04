@@ -71,7 +71,7 @@ DEPARTMENTS: list[dict] = [
             "blood pressure", "cholesterol", "angina",
         ],
         "required_document_types": [DocumentType.ECG_REPORT.value, DocumentType.INSURANCE_CARD.value],
-        "doctors": ["Dr. Meera Iyer", "Dr. Samuel Okonkwo"],
+        "doctors": ["Dr. Ayesha Malik", "Dr. Hassan Raza"],
     },
     {
         "name": "Orthopedics",
@@ -81,7 +81,7 @@ DEPARTMENTS: list[dict] = [
             "back pain", "sprain", "ligament", "orthopedic",
         ],
         "required_document_types": [DocumentType.IMAGING_REPORT.value, DocumentType.INSURANCE_CARD.value],
-        "doctors": ["Dr. Lena Fischer", "Dr. Arjun Desai"],
+        "doctors": ["Dr. Bilal Ahmed", "Dr. Sana Qureshi"],
     },
     {
         "name": "Dermatology",
@@ -91,7 +91,7 @@ DEPARTMENTS: list[dict] = [
             "dermatitis", "hair loss", "dermatology",
         ],
         "required_document_types": [DocumentType.INSURANCE_CARD.value],
-        "doctors": ["Dr. Yuki Tanaka", "Dr. Fatima Al-Rashid"],
+        "doctors": ["Dr. Adeel Farooq", "Dr. Mahnoor Siddiqui"],
     },
     {
         "name": "Neurology",
@@ -101,7 +101,7 @@ DEPARTMENTS: list[dict] = [
             "numbness", "dizziness", "nerve", "tremor", "neurology",
         ],
         "required_document_types": [DocumentType.IMAGING_REPORT.value, DocumentType.INSURANCE_CARD.value],
-        "doctors": ["Dr. Peter Grant", "Dr. Ana Sousa"],
+        "doctors": ["Dr. Zeeshan Chaudhry", "Dr. Hira Javed"],
     },
     {
         "name": "General Medicine",
@@ -111,7 +111,7 @@ DEPARTMENTS: list[dict] = [
             "fatigue", "general", "physical", "vaccination",
         ],
         "required_document_types": [DocumentType.INSURANCE_CARD.value],
-        "doctors": ["Dr. Nadia Haddad", "Dr. Tom Bennett"],
+        "doctors": ["Dr. Faizullah Iqbal", "Dr. Zara Hashmi"],
     },
     {
         "name": "Radiology",
@@ -121,50 +121,50 @@ DEPARTMENTS: list[dict] = [
             "imaging", "sonography", "radiology", "mammogram",
         ],
         "required_document_types": [DocumentType.REFERRAL_LETTER.value],
-        "doctors": ["Dr. Ravi Krishnan", "Dr. Elise Moreau"],
+        "doctors": ["Dr. Ali Khan", "Dr. Amna Butt"],
     },
 ]
 
 PATIENTS: list[dict] = [
     {
-        "name": "Asha Menon",
-        "email": "asha.menon@example.com",
+        "name": "Ayesha Tariq",
+        "email": "ayesha.tariq@example.com",
         "date_of_birth": date(1986, 3, 14),
-        "phone": "+91-98200-11223",
-        "emergency_contact": "Vikram Menon (spouse) +91-98200-11224",
+        "phone": "+92-300-1234567",
+        "emergency_contact": "Hassan Tariq (spouse) +92-300-1234568",
     },
     {
-        "name": "Rohit Sharma",
-        "email": "rohit.sharma@example.com",
+        "name": "Ali Hassan",
+        "email": "ali.hassan@example.com",
         "date_of_birth": date(1994, 11, 2),
-        "phone": "+91-99870-55440",
-        "emergency_contact": "Sunita Sharma (mother) +91-99870-55441",
+        "phone": "+92-301-2345678",
+        "emergency_contact": "Amna Hassan (mother) +92-301-2345679",
     },
     {
-        "name": "Priya Nair",
-        "email": "priya.nair@example.com",
+        "name": "Sana Malik",
+        "email": "sana.malik@example.com",
         "date_of_birth": date(1971, 6, 28),
-        "phone": "+91-90040-77881",
-        "emergency_contact": "Deepak Nair (brother) +91-90040-77882",
+        "phone": "+92-302-3456789",
+        "emergency_contact": "Adeel Malik (brother) +92-302-3456780",
     },
 ]
 
 # Filenames are chosen so `classify_by_filename` resolves them deterministically —
 # these seed the document fast-path rather than the LLM classification path.
-# Priya is left with no documents so `check_missing_documents` has a real gap to find.
+# Sana is left with no documents so `check_missing_documents` has a real gap to find.
 DOCUMENTS: list[dict] = [
     {
-        "patient_email": "asha.menon@example.com",
+        "patient_email": "ayesha.tariq@example.com",
         "filename": "ecg_report_2026_07_10.pdf",
         "body": "SYNTHETIC SAMPLE — ECG report for demonstration only. Not a real clinical record.",
     },
     {
-        "patient_email": "asha.menon@example.com",
+        "patient_email": "ayesha.tariq@example.com",
         "filename": "insurance_card_front.pdf",
         "body": "SYNTHETIC SAMPLE — insurance card image placeholder.",
     },
     {
-        "patient_email": "rohit.sharma@example.com",
+        "patient_email": "ali.hassan@example.com",
         "filename": "blood_report_2026_07_01.pdf",
         "body": "SYNTHETIC SAMPLE — CBC panel placeholder. Not a real clinical record.",
     },
@@ -231,7 +231,7 @@ def seed_staff(db: Session, *, admin_id: int) -> User:
         return existing
     return patient_service.create_staff_user(
         db,
-        name="Priya Desai (Front Desk)",
+        name="Amna Farooq (Front Desk)",
         email=STAFF_EMAIL,
         password=DEMO_PASSWORD,
         role=UserRole.STAFF,

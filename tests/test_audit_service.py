@@ -31,7 +31,7 @@ class TestLineageFiltering:
             run_id=1,
             tool="find_available_slots",
             args={"department_name": "Cardiology"},
-            result="Open slots in Cardiology:\n- slot_id=1: Mon 03 Aug 2026, 09:00 with Dr. Meera Iyer",
+            result="Open slots in Cardiology:\n- slot_id=1: Mon 03 Aug 2026, 09:00 with Dr. Ayesha Malik",
         )
 
         lineage = audit_service.list_lineage_for_workflow(db, 1)
@@ -39,13 +39,13 @@ class TestLineageFiltering:
         assert len(lineage) == 1
         assert lineage[0].step == "Checked doctor availability"
         assert lineage[0].tool == "find_available_slots"
-        assert "Dr. Meera Iyer" in lineage[0].detail
+        assert "Dr. Ayesha Malik" in lineage[0].detail
 
     def test_a_non_lineage_tool_call_is_excluded(self, db):
         """get_patient_record, save_workflow_state etc. are real tool calls too, but
         they aren't "what data was this decision based on" — they stay in the raw
         audit trail, not the lineage view."""
-        _record_tool_call(db, run_id=2, tool="get_patient_record", result="Patient: Asha Menon")
+        _record_tool_call(db, run_id=2, tool="get_patient_record", result="Patient: Ayesha Tariq")
 
         lineage = audit_service.list_lineage_for_workflow(db, 2)
 
