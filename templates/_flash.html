@@ -1,0 +1,4 @@
+{% set notice = request.query_params.get('notice') %}
+{% set error = request.query_params.get('error') %}
+{% if notice %}<div class="flash flash-notice">{{ notice }}</div>{% endif %}
+{% if error %}<div class="flash flash-error">{{ error }}</div>{% endif %}

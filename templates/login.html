@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}Log in · AgentCare{% endblock %}
+{% block content %}
+<div class="auth-shell">
+  <div class="auth-card">
+    {% from "macros/logo.html" import logo %}
+    <div class="auth-logo">{{ logo(40) }}<span>AgentCare</span></div>
+    <p class="auth-subtitle">Administrative coordination for patient care.</p>
+
+    <div class="tabs" role="tablist">
+      <button type="button" class="tab{% if active_tab != 'register' %} active{% endif %}" data-tab="login">Log in</button>
+      <button type="button" class="tab{% if active_tab == 'register' %} active{% endif %}" data-tab="register">Register</button>
+    </div>
+
+    <form method="post" action="/login" class="tab-panel{% if active_tab == 'register' %} hidden{% endif %}" data-panel="login">
+      {% if login_error %}<div class="form-error">{{ login_error }}</div>{% endif %}
+      <label>Email<input type="email" name="email" required autocomplete="username" autofocus></label>
+      <label>Password<input type="password" name="password" required autocomplete="current-password"></label>
+      <button type="submit" class="btn btn-primary btn-block">Log in</button>
+    </form>
+
+    <form method="post" action="/register" class="tab-panel{% if active_tab != 'register' %} hidden{% endif %}" data-panel="register">
+      {% if register_error %}<div class="form-error">{{ register_error }}</div>{% endif %}
+      <label>Full name<input type="text" name="name" required></label>
+      <label>Email<input type="email" name="email" required autocomplete="username"></label>
+      <label>Password<input type="password" name="password" required minlength="8" autocomplete="new-password"><small>At least 8 characters</small></label>
+      <label>Phone <span class="optional">(optional)</span><input type="tel" name="phone"></label>
+      <button type="submit" class="btn btn-primary btn-block">Create account</button>
+    </form>
+  </div>
+</div>
+{% endblock %}
+{% block scripts %}<script src="/static/js/tabs.js"></script>{% endblock %}
