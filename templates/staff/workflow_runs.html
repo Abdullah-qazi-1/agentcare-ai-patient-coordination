@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block title %}Workflow Runs · AgentCare{% endblock %}
+{% block content %}
+{% from "macros/status_chip.html" import status_chip %}
+<h1>Workflow Runs</h1>
+
+<form method="get" action="/staff/workflows" class="filter-row">
+  <label>Status
+    <select name="status" onchange="this.form.submit()">
+      <option value="" {% if not selected_status %}selected{% endif %}>All</option>
+      {% for s in ["in_progress", "awaiting_review", "completed", "terminated", "failed"] %}
+      <option value="{{ s }}" {% if selected_status == s %}selected{% endif %}>{{ s | prettify }}</option>
+      {% endfor %}
+    </select>
+  </label>
+</form>
+
+{% if not runs %}
+<div class="empty-state"><p>No workflow runs match this filter.</p></div>
+{% else %}
+<div class="accordion">
+  {% for run in runs %}
+  <details class="accordion-item">
+    <summary>
+      {{ status_chip(run.status) }}
+      <span class="accordion-title">#{{ run.id }} — {{ run.raw_request[:70] }}{% if run.raw_request|length > 70 %}…{% endif %}</span>
+      <span class="accordion-id">{{ run.current_step | prettify }}</span>
+    </summary>
+    <div class="accordion-body">
+      <div class="lazy-slot" data-lazy-url="/staff/workflows/{{ run.id }}/detail-fragment" data-loaded="0">
+        <p class="muted">Loading…</p>
+      </div>
+    </div>
+  </details>
+  {% endfor %}
+</div>
+{% endif %}
+{% endblock %}
+{% block scripts %}<script src="/static/js/accordion.js"></script>{% endblock %}

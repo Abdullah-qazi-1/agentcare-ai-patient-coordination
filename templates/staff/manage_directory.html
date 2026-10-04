@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+{% block title %}Manage Directory · AgentCare{% endblock %}
+{% block content %}
+<h1>Manage Directory</h1>
+
+<div class="directory-layout">
+  <div>
+    <div class="card">
+      <h3>Add a department</h3>
+      <form method="post" action="/staff/directory/departments">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+        <label>Name<input type="text" name="name" required></label>
+        <label>Description <span class="optional">(optional)</span><input type="text" name="description"></label>
+        <label>Routing keywords <span class="optional">(comma-separated)</span><input type="text" name="routing_keywords"></label>
+        <button type="submit" class="btn btn-primary">Add department</button>
+      </form>
+    </div>
+
+    <h3 style="margin-top:20px;">Departments</h3>
+    <div class="table-wrap">
+    <table class="data-table">
+      <thead><tr><th>Name</th><th>Status</th></tr></thead>
+      <tbody>
+      {% for d in departments %}
+      <tr>
+        <td>{{ d.name }}</td>
+        <td>
+          <form method="post" action="/staff/directory/departments/{{ d.id }}/toggle-active" class="inline-form">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+            <input type="hidden" name="active" value="{{ 'false' if d.active else 'true' }}">
+            <button type="submit" class="btn btn-sm {{ 'btn-secondary' if d.active else 'btn-ghost' }}">{{ "Active" if d.active else "Inactive" }}</button>
+          </form>
+        </td>
+      </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+    </div>
+  </div>
+
+  <div>
+    <div class="card">
+      <h3>Add a doctor</h3>
+      <form method="post" action="/staff/directory/doctors">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+        <label>Department
+          <select name="department_id" required>
+            {% for d in departments %}<option value="{{ d.id }}">{{ d.name }}</option>{% endfor %}
+          </select>
+        </label>
+        <label>Name<input type="text" name="name" required placeholder="Dr. ..."></label>
+        <button type="submit" class="btn btn-primary">Add doctor</button>
+      </form>
+    </div>
+
+    <div class="card" style="margin-top:16px;">
+      <h3>Add an appointment slot</h3>
+      <form method="post" action="/staff/directory/slots">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+        <label>Doctor
+          <select name="doctor_id" required>
+            {% for d in doctors %}<option value="{{ d.id }}">{{ d.name }}</option>{% endfor %}
+          </select>
+        </label>
+        <label>Start<input type="datetime-local" name="start_time" value="{{ default_start }}" required></label>
+        <label>End<input type="datetime-local" name="end_time" value="{{ default_end }}" required></label>
+        <button type="submit" class="btn btn-primary">Add slot</button>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

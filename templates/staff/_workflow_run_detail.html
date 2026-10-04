@@ -1,0 +1,53 @@
+{% from "macros/relevant_documents_panel.html" import relevant_documents_panel %}
+{% from "macros/lineage_panel.html" import lineage_panel %}
+
+{% if pending_escalation %}
+<div class="form-error">
+  This run has a pending safety escalation (#{{ pending_escalation.id }}). Resolve it from
+  <a href="/staff/escalations">Escalations</a> instead.
+</div>
+{% elif needs_direct_resume %}
+<div class="resume-actions">
+  <h4>Awaiting approval</h4>
+  <form method="post" action="/staff/workflows/{{ run.id }}/resume" class="inline-form">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+    <input type="hidden" name="approved" value="true">
+    <button type="submit" class="btn btn-primary btn-sm">Approve</button>
+  </form>
+  <form method="post" action="/staff/workflows/{{ run.id }}/resume" class="inline-form">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+    <input type="hidden" name="approved" value="false">
+    <button type="submit" class="btn btn-danger btn-sm">Reject</button>
+  </form>
+</div>
+{% endif %}
+
+<h4>Assign doctor</h4>
+<form method="post" action="/staff/workflows/{{ run.id }}/assign-doctor" class="assign-doctor-form">
+  <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+  <select name="doctor_id" required>
+    <option value="">Select a doctor</option>
+    {% for d in doctors %}
+    <option value="{{ d.id }}" {% if run.assigned_doctor_id == d.id %}selected{% endif %}>{{ d.name }}</option>
+    {% endfor %}
+  </select>
+  <input type="text" name="note" placeholder="Note (optional)" maxlength="500">
+  <button type="submit" class="btn btn-secondary btn-sm">{{ "Reassign" if run.assigned_doctor_id else "Assign" }}</button>
+</form>
+
+<h4>Attached documents</h4>
+{{ relevant_documents_panel(documents) }}
+
+<h4>What the pipeline checked</h4>
+{{ lineage_panel(lineage) }}
+
+<h4>Audit trail</h4>
+{% if not audit_trail %}
+<p class="muted">No audit events yet.</p>
+{% else %}
+<ul class="audit-trail">
+  {% for ev in audit_trail %}
+  <li><strong>{{ ev.action | prettify }}</strong> — {{ ev.actor_label }} · {{ ev.created_at.strftime('%d %b %Y, %H:%M') }}</li>
+  {% endfor %}
+</ul>
+{% endif %}

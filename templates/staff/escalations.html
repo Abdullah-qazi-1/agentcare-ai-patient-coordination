@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block title %}Escalations · AgentCare{% endblock %}
+{% block content %}
+<h1>Pending Escalations</h1>
+
+{% if not escalations %}
+<div class="empty-state"><p>No escalations waiting for review.</p></div>
+{% else %}
+<div class="escalation-list">
+  {% for e in escalations %}
+  <div class="card escalation-card">
+    <div class="escalation-header">
+      <span class="chip chip--warning">{{ e.reason | prettify }}</span>
+      <span class="muted">Run #{{ e.workflow_run_id }}</span>
+    </div>
+    <p>{{ e.detail }}</p>
+    <form method="post" action="/staff/escalations/{{ e.id }}/resolve" class="escalation-form">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+      <label>Resolution note <span class="optional">(optional)</span>
+        <input type="text" name="resolution_note" maxlength="1000">
+      </label>
+      <div class="escalation-actions">
+        <button type="submit" name="decision" value="approved" class="btn btn-primary btn-sm">Approve</button>
+        <button type="button" class="btn btn-danger btn-sm" data-confirm-dialog="reject-dialog-{{ e.id }}">Reject</button>
+      </div>
+    </form>
+  </div>
+
+  <dialog id="reject-dialog-{{ e.id }}" class="confirm-dialog">
+    <form method="post" action="/staff/escalations/{{ e.id }}/resolve">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+      <input type="hidden" name="decision" value="rejected">
+      <h3>Reject this escalation?</h3>
+      <p>This will terminate workflow run #{{ e.workflow_run_id }}.</p>
+      <label>Resolution note <span class="optional">(optional)</span><input type="text" name="resolution_note" maxlength="1000"></label>
+      <div class="dialog-actions">
+        <button type="button" class="btn btn-ghost" data-dialog-cancel>Cancel</button>
+        <button type="submit" class="btn btn-danger">Reject</button>
+      </div>
+    </form>
+  </dialog>
+  {% endfor %}
+</div>
+{% endif %}
+{% endblock %}
+{% block scripts %}<script src="/static/js/confirm.js"></script>{% endblock %}

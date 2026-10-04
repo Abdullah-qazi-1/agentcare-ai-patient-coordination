@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title %}Patients · AgentCare{% endblock %}
+{% block content %}
+<h1>Patients</h1>
+<div class="table-wrap">
+<table class="data-table">
+  <thead><tr><th>ID</th><th>Name</th><th>Email</th><th>Phone</th><th>Preferred language</th></tr></thead>
+  <tbody>
+    {% for p in patients %}
+    <tr>
+      <td>{{ p.id }}</td>
+      <td>{{ p.name }}</td>
+      <td>{{ p.email }}</td>
+      <td>{{ p.phone or "—" }}</td>
+      <td>{{ p.preferred_language }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+</div>
+{% endblock %}

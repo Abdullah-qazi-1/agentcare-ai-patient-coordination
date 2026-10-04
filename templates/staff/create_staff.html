@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}Add Staff · AgentCare{% endblock %}
+{% block content %}
+<h1>Add a staff or admin account</h1>
+<form method="post" action="/staff/new-staff" class="card" style="max-width:420px;">
+  <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+  <label>Name<input type="text" name="name" required></label>
+  <label>Email<input type="email" name="email" required></label>
+  <label>Password<input type="password" name="password" required minlength="8"></label>
+  <label>Role
+    <select name="role">
+      <option value="staff">Staff</option>
+      <option value="admin">Admin</option>
+    </select>
+  </label>
+  <button type="submit" class="btn btn-primary">Create account</button>
+</form>
+{% endblock %}
