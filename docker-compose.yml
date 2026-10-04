@@ -1,0 +1,35 @@
+# SQLite-only, matching the project's local-dev default (README's "Setup" section
+# covers swapping DATABASE_URL to Postgres for a real deployment — this compose file
+# doesn't need to duplicate that). `.env` at the repo root must exist and carry a real
+# LLM_API_KEY before `docker compose up --build`; see README > Setup.
+#
+# One service, not two: the interface is server-rendered by this same FastAPI app
+# (`app/web/`), not a separately built/served React app — there is nothing left for a
+# second "frontend" container to build or serve.
+
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    env_file:
+      - .env
+    environment:
+      # Relocated off the image's writable layer and onto the named volume below, so
+      # the database survives `docker compose down` (without `-v`) and image rebuilds.
+      DATABASE_URL: sqlite:////app/data/agentcare.db
+    ports:
+      - "8000:8000"
+    volumes:
+      - agentcare-db:/app/data
+      - agentcare-documents:/app/storage/documents
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health', timeout=3)"]
+      interval: 30s
+      timeout: 5s
+      start_period: 15s
+      retries: 3
+
+volumes:
+  agentcare-db:
+  agentcare-documents:
