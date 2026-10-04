@@ -1,0 +1,28 @@
+# NeMo Guardrails config for AgentCare's additional semantic input/output rail.
+#
+# This is layer 6 of the clinical safety boundary (see README) — a semantic,
+# LLM-based check on top of the deterministic regex scanner (app/services/safety_service.py)
+# and the Safety agent's judgement. It uses the built-in "self check input"/"self check
+# output" rails (LLM self-check moderation) rather than hand-written Colang dialog
+# flows, since there is no conversational flow to author here — every AgentCare
+# request already goes through the fixed LangGraph pipeline.
+#
+# No `models:` section: `app/guardrails/service.py` injects the project's own
+# `ChatOpenAI` client (`LLMRails(config, llm=...)`) built from the same LLM
+# settings every agent uses, so credentials and model tiering are configured in
+# exactly one place (`app/core/config.py`), not duplicated here.
+
+# The Kimi K3 endpoint 400s on any `temperature` other than its own default —
+# confirmed directly against the provider ("invalid temperature: only 1 is allowed for
+# this model"). NeMo Guardrails' self-check actions always pass `lowest_temperature`
+# explicitly (see nemoguardrails/rails/llm/config.py), so it has to be raised to
+# match rather than left at the library default of 0.001.
+lowest_temperature: 1.0
+
+rails:
+  input:
+    flows:
+      - self check input
+  output:
+    flows:
+      - self check output
