@@ -1,9 +1,12 @@
 [project]
 name = "agentcare"
 version = "1.0.0"
-description = "Agentic AI for patient administration and care coordination — AgentCare Build Challenge 2026"
+description = "Agentic AI for patient administration and care coordination"
 requires-python = ">=3.11,<3.14"
 license = { text = "MIT" }
+authors = [
+    { name = "Abdullah", email = "abdullahizaq321@gmail.com" },
+]
 
 dependencies = [
     # ---- Agentic AI / LLM (LangChain v1 + LangGraph v1) ----

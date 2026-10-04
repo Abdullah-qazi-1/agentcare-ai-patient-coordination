@@ -403,7 +403,9 @@ select {
 /* Auth: split-screen login/register -------------------------------------- */
 
 .auth-split {
-  min-height: 100vh;
+  height: 100vh;
+  height: 100dvh;
+  overflow: hidden;
   display: grid;
   grid-template-columns: 1fr 1fr;
 }
@@ -416,31 +418,35 @@ select {
   background: radial-gradient(900px 500px at 0% 0%, rgba(14, 159, 130, 0.35), transparent 60%),
               linear-gradient(160deg, var(--color-primary), var(--color-primary-dark));
   color: #fff;
-  padding: 48px 44px;
+  padding: 36px 40px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  overflow-y: auto;
+  min-height: 0;
 }
 .auth-hero-top .brand { color: #fff; }
-.auth-hero h1 { color: #fff; font-size: 2.1rem; max-width: 420px; margin-top: 28px; }
+.auth-hero h1 { color: #fff; font-size: 1.85rem; max-width: 420px; margin-top: 20px; }
 .auth-hero p { color: rgba(255, 255, 255, 0.78); max-width: 400px; }
-.auth-hero-features { display: flex; flex-direction: column; gap: 12px; margin-top: 24px; }
+.auth-hero-features { display: flex; flex-direction: column; gap: 10px; margin-top: 18px; }
 .auth-feature {
   background: rgba(255, 255, 255, 0.08);
   border: 1px solid rgba(255, 255, 255, 0.14);
   border-radius: var(--radius-sm);
-  padding: 12px 14px;
-  font-size: 0.85rem;
+  padding: 10px 14px;
+  font-size: 0.83rem;
   color: rgba(255, 255, 255, 0.92);
 }
 .auth-feature strong { display: block; margin-bottom: 2px; color: #fff; }
-.auth-hero-foot { font-size: 0.78rem; color: rgba(255, 255, 255, 0.55); }
+.auth-hero-foot { font-size: 0.76rem; color: rgba(255, 255, 255, 0.55); padding-top: 12px; }
 
 .auth-form-side {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 40px 20px;
+  padding: 24px 20px;
+  overflow-y: auto;
+  min-height: 0;
 }
 .auth-card {
   width: 100%;
