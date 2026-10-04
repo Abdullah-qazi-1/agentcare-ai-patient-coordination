@@ -3,7 +3,8 @@
 **Agentic AI for patient administration and care coordination — a FastAPI + LangGraph system that turns a free-text patient request into completed, auditable administrative work.**
 
 > Submitted as part of an application to **Dafinitiq AI — AI Engineer Associate**.
-> Live demo: _[add deployed URL here after Phase 4]_
+> Live demo: **[gentcare-ai-patient-coordination.onrender.com](https://gentcare-ai-patient-coordination.onrender.com)**
+> (free tier — the first request after a period of inactivity may take ~30-50s to wake up)
 
 ---
 
