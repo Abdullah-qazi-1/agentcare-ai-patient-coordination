@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block title %}New Request · AgentCare{% endblock %}
+{% block content %}
+{% from "macros/status_chip.html" import status_chip %}
+<h1>New administrative request</h1>
+<p class="page-subtitle">
+  Describe what you need in your own words — AgentCare handles the administrative
+  work: routing, booking, documents and reminders. It never diagnoses or advises on
+  treatment.
+</p>
+
+<form method="post" action="/" class="card">
+  <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+  <label>
+    What do you need?
+    <textarea
+      name="request_text" required minlength="3" maxlength="2000"
+      placeholder="e.g. I need a cardiology appointment next week, and I want to attach my previous ECG"
+    ></textarea>
+  </label>
+  <button type="submit" class="btn btn-primary">Submit request</button>
+</form>
+
+{% if submit_error %}
+<div class="card result-card">
+  <div class="form-error">{{ submit_error }}</div>
+</div>
+{% elif result %}
+<div class="card result-card">
+  <div class="result-header">
+    {{ status_chip(result.status) }}
+    {% if result.awaiting_human_review %}<span class="chip chip--warning">Needs staff review</span>{% endif %}
+  </div>
+  <p>{{ result.summary }}</p>
+  <p class="result-meta">
+    Request #{{ result.workflow_run_id }} · Step: {{ result.current_step | prettify }}
+    {% if result.appointment_id %} · Appointment #{{ result.appointment_id }}{% endif %}
+  </p>
+  <a class="btn btn-secondary" href="/requests">View in My Requests</a>
+</div>
+{% endif %}
+{% endblock %}

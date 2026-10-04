@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block title %}My Requests · AgentCare{% endblock %}
+{% block content %}
+{% from "macros/status_chip.html" import status_chip %}
+<h1>My Requests</h1>
+
+{% if not runs %}
+<div class="empty-state">
+  <p>You haven't submitted any requests yet.</p>
+  <a class="btn btn-primary" href="/">Submit a request</a>
+</div>
+{% else %}
+<div class="accordion">
+  {% for run in runs %}
+  <details class="accordion-item">
+    <summary>
+      {{ status_chip(run.status) }}
+      <span class="accordion-title">{{ run.raw_request[:90] }}{% if run.raw_request|length > 90 %}…{% endif %}</span>
+      <span class="accordion-id">#{{ run.id }}</span>
+    </summary>
+    <div class="accordion-body">
+      <p><strong>Step:</strong> {{ run.current_step | prettify }}</p>
+      {% if run.state_snapshot.summary %}<p>{{ run.state_snapshot.summary }}</p>{% endif %}
+      {% if run.assigned_doctor_id %}
+        <span class="chip chip--info">Assigned to {{ doctor_names.get(run.assigned_doctor_id, "doctor #" ~ run.assigned_doctor_id) }}</span>
+      {% endif %}
+      <div class="lazy-slot" data-lazy-url="/requests/{{ run.id }}/detail-fragment" data-loaded="0">
+        <p class="muted">Loading…</p>
+      </div>
+    </div>
+  </details>
+  {% endfor %}
+</div>
+{% endif %}
+{% endblock %}
+{% block scripts %}<script src="/static/js/accordion.js"></script>{% endblock %}

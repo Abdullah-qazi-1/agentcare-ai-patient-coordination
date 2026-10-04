@@ -1,0 +1,6 @@
+{% from "macros/relevant_documents_panel.html" import relevant_documents_panel %}
+{% from "macros/lineage_panel.html" import lineage_panel %}
+<h4>Attached documents</h4>
+{{ relevant_documents_panel(documents) }}
+<h4>What the pipeline checked</h4>
+{{ lineage_panel(lineage) }}

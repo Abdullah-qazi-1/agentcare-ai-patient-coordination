@@ -1,0 +1,23 @@
+{% macro doctor_card(doctor, department_name, slot_count) %}
+{% set palette = ["#818CF8", "#34D399", "#F472B6", "#FB923C", "#38BDF8", "#A3E635"] %}
+{% set color = palette[doctor.id % 6] %}
+<div class="doctor-card" data-dept="{{ doctor.department_id }}">
+  <div class="doctor-card-header">
+    <span class="doctor-avatar" style="background:{{ color }}">{{ doctor.name | initials }}</span>
+    <div>
+      <div class="doctor-name">{{ doctor.name }}</div>
+      <div class="doctor-dept">{{ department_name }}</div>
+    </div>
+  </div>
+  <div class="doctor-card-footer">
+    {% if slot_count > 0 %}
+      <span class="chip chip--success">{{ slot_count }} open</span>
+    {% else %}
+      <span class="chip chip--default">No slots</span>
+    {% endif %}
+    <button type="button" class="btn btn-secondary btn-sm" data-doctor-toggle="{{ doctor.id }}" {% if slot_count == 0 %}disabled{% endif %}>
+      View availability
+    </button>
+  </div>
+</div>
+{% endmacro %}

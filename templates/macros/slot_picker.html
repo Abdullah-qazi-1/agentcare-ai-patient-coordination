@@ -1,0 +1,23 @@
+{% macro slot_panel(doctor, slots, csrf_token) %}
+<div class="slot-panel card" id="slot-panel-{{ doctor.id }}" hidden>
+  {% if not slots %}
+    <p class="muted">No open slots for this doctor.</p>
+  {% else %}
+  <form method="post" action="/appointments/book" class="slot-form">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+    <input type="hidden" name="slot_id" class="slot-form-slot-id" value="">
+    <div class="slot-grid">
+      {% for slot in slots %}
+      <button type="button" class="slot-btn" data-slot-id="{{ slot.slot_id }}">
+        {{ slot.start_time.strftime('%a %d %b') }}<br><small>{{ slot.start_time.strftime('%H:%M') }}</small>
+      </button>
+      {% endfor %}
+    </div>
+    <div class="slot-confirm hidden">
+      <label>Reason <span class="optional">(optional)</span><input type="text" name="reason" maxlength="255"></label>
+      <button type="submit" class="btn btn-primary">Confirm booking</button>
+    </div>
+  </form>
+  {% endif %}
+</div>
+{% endmacro %}

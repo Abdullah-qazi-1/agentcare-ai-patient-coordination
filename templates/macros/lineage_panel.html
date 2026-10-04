@@ -1,0 +1,17 @@
+{% macro lineage_panel(entries) %}
+<div class="lineage-panel">
+  {% if not entries %}
+    <p class="muted">No lineage recorded for this request yet.</p>
+  {% else %}
+    <ol class="lineage-list">
+      {% for e in entries %}
+      <li>
+        <div class="lineage-step">{{ e.step }}</div>
+        <div class="lineage-detail">{{ e.detail }}</div>
+        <div class="lineage-meta">{{ e.agent }} · {{ e.tool }} · {{ e.created_at.strftime('%d %b %Y, %H:%M') }}</div>
+      </li>
+      {% endfor %}
+    </ol>
+  {% endif %}
+</div>
+{% endmacro %}

@@ -1,0 +1,17 @@
+{% macro relevant_documents_panel(documents) %}
+<div class="relevant-documents">
+  {% if not documents %}
+    <p class="muted">No documents attached to this request.</p>
+  {% else %}
+    <ul class="doc-list">
+      {% for d in documents %}
+      <li>
+        <span class="chip chip--default">{{ d.document_type | prettify }}</span>
+        <span class="doc-name">{{ d.original_filename }}</span>
+        {% if d.summary %}<p class="doc-summary">{{ d.summary }}</p>{% endif %}
+      </li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+</div>
+{% endmacro %}

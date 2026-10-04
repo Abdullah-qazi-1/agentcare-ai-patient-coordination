@@ -1,0 +1,14 @@
+{% macro confirm_dialog(dialog_id, title, message, action_url, confirm_label, confirm_color, csrf_token, extra_fields={}) %}
+<dialog id="{{ dialog_id }}" class="confirm-dialog">
+  <form method="post" action="{{ action_url }}">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+    {% for key, value in extra_fields.items() %}<input type="hidden" name="{{ key }}" value="{{ value }}">{% endfor %}
+    <h3>{{ title }}</h3>
+    <p>{{ message }}</p>
+    <div class="dialog-actions">
+      <button type="button" class="btn btn-ghost" data-dialog-cancel>Cancel</button>
+      <button type="submit" class="btn btn-{{ confirm_color }}">{{ confirm_label }}</button>
+    </div>
+  </form>
+</dialog>
+{% endmacro %}

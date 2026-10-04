@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}Reminders · AgentCare{% endblock %}
+{% block content %}
+{% from "macros/status_chip.html" import status_chip %}
+<h1>Reminders</h1>
+{% if not reminders %}
+<div class="empty-state"><p>No reminders scheduled.</p></div>
+{% else %}
+<div class="accordion">
+  {% for r in reminders %}
+  <div class="card reminder-row">
+    {{ status_chip(r.status) }}
+    <div><strong>{{ r.reminder_type | prettify }}</strong><br><small>{{ r.scheduled_at.strftime('%A %d %B %Y, %H:%M') }}</small></div>
+  </div>
+  {% endfor %}
+</div>
+{% endif %}
+{% endblock %}
