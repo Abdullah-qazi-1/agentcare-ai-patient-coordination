@@ -460,8 +460,8 @@ does PDF text extraction for document summaries. FastAPI, SQLAlchemy, Alembic, a
 Pydantic are used as documented above; the interface is server-rendered with Jinja2
 and plain CSS/JS — no frontend framework.
 
-Developed with AI assistance (Claude); all architecture decisions, safety design, and
-code were reviewed and verified against a running system.
+All architecture decisions, safety design, and code were reviewed and verified
+against a running system.
 
 ---
 
