@@ -1,0 +1,16 @@
+.venv/
+.git/
+.github/
+.claude/
+docs/
+__pycache__/
+*.pyc
+.pytest_cache/
+.ruff_cache/
+*.db
+*.db-shm
+*.db-wal
+storage/documents/*
+.env
+.env.example
+README.md

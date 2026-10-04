@@ -1,0 +1,44 @@
+# Secrets
+.env
+.env.*
+!.env.example
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
+.ruff_cache/
+.venv/
+venv/
+*.egg-info/
+build/
+dist/
+
+# Database
+*.db
+*.db-shm
+*.db-wal
+*.sqlite3
+agentcare.db
+agentcare_checkpoints.db*
+
+# Uploaded documents (synthetic sample data only, not committed at runtime)
+storage/documents/
+
+# Logs
+*.log
+
+# Claude Code local settings (machine-specific, not shared)
+.claude/settings.local.json
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Streamlit
+.streamlit/secrets.toml
