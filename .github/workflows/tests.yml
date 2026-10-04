@@ -1,0 +1,27 @@
+name: Tests
+
+# Runs the project's own test suite and lint on every push/PR — nothing else in the
+# repo does that, so a regression could otherwise merge without ever running `pytest`.
+on:
+  push:
+  pull_request:
+
+jobs:
+  backend:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v4
+        with:
+          enable-cache: true
+
+      - name: Install dependencies
+        run: uv sync --dev
+
+      - name: Pytest
+        run: uv run pytest -q
+
+      - name: Ruff
+        run: uv run ruff check .
