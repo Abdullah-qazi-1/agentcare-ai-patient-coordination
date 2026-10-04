@@ -6,26 +6,33 @@
 {% from "macros/slot_picker.html" import slot_panel %}
 {% from "macros/confirm_dialog.html" import confirm_dialog %}
 
-<h1>Find a Doctor</h1>
+<div class="eyebrow">Care Network</div>
+<h1>Find a Doctor &amp; Book Appointment</h1>
+<p class="page-subtitle">Browse real doctor availability by department and book a slot directly.</p>
 
-<div class="doctors-layout">
-  <div class="doctors-main">
+<div class="with-sidebar">
+  <div>
+    <div class="search-box" style="margin-bottom: 16px; max-width: 100%;">
+      <input type="text" id="doctor-search" placeholder="Search doctors by name…">
+    </div>
+
     <div class="chip-filter-row">
-      <button type="button" class="chip-filter active" data-dept-filter="all">All</button>
+      <button type="button" class="chip-filter active" data-dept-filter="all">All Departments</button>
       {% for d in departments %}
       <button type="button" class="chip-filter" data-dept-filter="{{ d.id }}">{{ d.name }}</button>
       {% endfor %}
     </div>
 
-    <div class="doctor-grid">
+    <div class="doctor-grid" id="doctor-grid">
       {% for doc in doctors %}
         {{ doctor_card(doc, department_by_id[doc.department_id].name if doc.department_id in department_by_id else "", slots_by_doctor.get(doc.id, []) | length) }}
         {{ slot_panel(doc, slots_by_doctor.get(doc.id, []), csrf_token) }}
       {% endfor %}
     </div>
+    <p class="muted" id="no-doctor-results" hidden>No doctors match your search.</p>
   </div>
 
-  <aside class="doctors-sidebar">
+  <aside class="sidebar-card">
     <h3>My Appointments</h3>
     {% set fixed = appointment_details | selectattr("status", "in", ["confirmed", "rescheduled"]) | list %}
     {% set other = appointment_details | rejectattr("status", "in", ["confirmed", "rescheduled"]) | list %}
@@ -53,7 +60,7 @@
 </div>
 {% endblock %}
 {% block scripts %}
-<script src="/static/js/chips.js"></script>
+<script src="/static/js/doctor_filter.js"></script>
 <script src="/static/js/slot_picker.js"></script>
 <script src="/static/js/confirm.js"></script>
 {% endblock %}

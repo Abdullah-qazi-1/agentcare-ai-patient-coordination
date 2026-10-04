@@ -2,7 +2,9 @@
 {% block title %}My Requests · AgentCare{% endblock %}
 {% block content %}
 {% from "macros/status_chip.html" import status_chip %}
-<h1>My Requests</h1>
+<div class="eyebrow">Triage &amp; Scheduling</div>
+<h1>My Care Requests</h1>
+<p class="page-subtitle">Track status, pipeline lineage, assigned doctors and documents across all your requests.</p>
 
 {% if not runs %}
 <div class="empty-state">
@@ -10,9 +12,21 @@
   <a class="btn btn-primary" href="/">Submit a request</a>
 </div>
 {% else %}
-<div class="accordion">
+<div class="filter-tabs" id="status-filter-tabs">
+  <button type="button" class="filter-tab active" data-filter="all">All <span class="count">{{ runs | length }}</span></button>
+  <button type="button" class="filter-tab" data-filter="in_progress">In Progress <span class="count">{{ runs | selectattr("status", "equalto", "in_progress") | list | length }}</span></button>
+  <button type="button" class="filter-tab" data-filter="awaiting_review">Needs Review <span class="count">{{ runs | selectattr("status", "equalto", "awaiting_review") | list | length }}</span></button>
+  <button type="button" class="filter-tab" data-filter="completed">Completed <span class="count">{{ runs | selectattr("status", "equalto", "completed") | list | length }}</span></button>
+</div>
+
+<div class="search-box">
+  <input type="text" id="request-search" placeholder="Search your requests…">
+</div>
+<br>
+
+<div class="accordion" id="requests-list">
   {% for run in runs %}
-  <details class="accordion-item">
+  <details class="accordion-item" data-status="{{ run.status.value }}" data-search="{{ run.raw_request | lower }}">
     <summary>
       {{ status_chip(run.status) }}
       <span class="accordion-title">{{ run.raw_request[:90] }}{% if run.raw_request|length > 90 %}…{% endif %}</span>
@@ -31,6 +45,10 @@
   </details>
   {% endfor %}
 </div>
+<p class="muted" id="no-results-msg" hidden>No requests match this filter.</p>
 {% endif %}
 {% endblock %}
-{% block scripts %}<script src="/static/js/accordion.js"></script>{% endblock %}
+{% block scripts %}
+<script src="/static/js/accordion.js"></script>
+<script src="/static/js/requests_filter.js"></script>
+{% endblock %}

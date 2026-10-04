@@ -2,7 +2,10 @@
 {% block title %}Reminders · AgentCare{% endblock %}
 {% block content %}
 {% from "macros/status_chip.html" import status_chip %}
-<h1>Reminders</h1>
+<div class="eyebrow">Automated Care Engine</div>
+<h1>Care Reminders &amp; Alerts</h1>
+<p class="page-subtitle">Upcoming automated notifications for appointments and follow-up tasks.</p>
+
 {% if not reminders %}
 <div class="empty-state"><p>No reminders scheduled.</p></div>
 {% else %}

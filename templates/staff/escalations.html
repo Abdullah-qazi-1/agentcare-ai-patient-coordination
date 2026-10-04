@@ -1,7 +1,9 @@
 {% extends "base.html" %}
 {% block title %}Escalations · AgentCare{% endblock %}
 {% block content %}
+<div class="eyebrow">Human-in-the-loop</div>
 <h1>Pending Escalations</h1>
+<p class="page-subtitle">Safety-flagged requests awaiting a staff decision.</p>
 
 {% if not escalations %}
 <div class="empty-state"><p>No escalations waiting for review.</p></div>

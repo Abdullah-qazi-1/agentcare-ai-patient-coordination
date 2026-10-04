@@ -2,7 +2,9 @@
 {% block title %}Workflow Runs · AgentCare{% endblock %}
 {% block content %}
 {% from "macros/status_chip.html" import status_chip %}
+<div class="eyebrow">Operations</div>
 <h1>Workflow Runs</h1>
+<p class="page-subtitle">Every request system-wide, its current pipeline step, and full audit lineage.</p>
 
 <form method="get" action="/staff/workflows" class="filter-row">
   <label>Status

@@ -1,46 +1,47 @@
-/* AgentCare theme tokens — modern dark SaaS aesthetic (indigo/violet accent) */
+/* AgentCare theme tokens — clean clinical SaaS aesthetic (light, navy/teal) */
 
 :root {
   /* Surfaces */
-  --color-bg: #0A0D14;
-  --color-bg-elevated: #0E121B;
-  --color-paper: #12161F;
-  --color-paper-hover: #171C28;
-  --color-border: #232838;
-  --color-border-strong: #2E3448;
+  --color-bg: #F4F7FB;
+  --color-bg-elevated: #FFFFFF;
+  --color-paper: #FFFFFF;
+  --color-paper-hover: #F8FAFC;
+  --color-border: #E3E9F1;
+  --color-border-strong: #CBD5E3;
 
   /* Text */
-  --color-text: #E9EBF3;
-  --color-text-secondary: #8891A7;
-  --color-text-faint: #5C6579;
+  --color-text: #101A2B;
+  --color-text-secondary: #5B6B82;
+  --color-text-faint: #8A96A8;
 
   /* Brand */
-  --color-primary: #6366F1;
-  --color-primary-dark: #4F46E5;
-  --color-primary-light: #818CF8;
-  --color-secondary: #22D3EE;
+  --color-primary: #0F2940;
+  --color-primary-dark: #081622;
+  --color-primary-light: #1E4766;
+  --color-secondary: #0E9F82;
+  --color-secondary-dark: #0B7D67;
 
   /* Semantic */
-  --color-success: #34D399;
-  --color-success-bg: rgba(52, 211, 153, 0.12);
-  --color-warning: #FBBF24;
-  --color-warning-bg: rgba(251, 191, 36, 0.12);
-  --color-error: #FB7185;
-  --color-error-bg: rgba(251, 113, 133, 0.12);
-  --color-info: #38BDF8;
-  --color-info-bg: rgba(56, 189, 248, 0.12);
-  --color-default: #8891A7;
-  --color-default-bg: rgba(136, 145, 167, 0.12);
+  --color-success: #0E9F6E;
+  --color-success-bg: #E7F8F1;
+  --color-warning: #D97706;
+  --color-warning-bg: #FEF3E2;
+  --color-error: #DC2626;
+  --color-error-bg: #FDECEC;
+  --color-info: #2563EB;
+  --color-info-bg: #EAF1FE;
+  --color-default: #5B6B82;
+  --color-default-bg: #EEF2F7;
 
-  --radius: 14px;
+  --radius: 16px;
   --radius-sm: 10px;
 
-  --shadow-card: 0 1px 2px rgba(0, 0, 0, 0.4), 0 10px 30px -10px rgba(0, 0, 0, 0.5);
-  --shadow-popover: 0 20px 60px -10px rgba(0, 0, 0, 0.6);
-  --shadow-glow: 0 0 0 1px rgba(99, 102, 241, 0.4), 0 8px 24px -4px rgba(99, 102, 241, 0.35);
+  --shadow-card: 0 1px 2px rgba(16, 26, 43, 0.04), 0 8px 24px -8px rgba(16, 26, 43, 0.08);
+  --shadow-popover: 0 24px 60px -12px rgba(16, 26, 43, 0.28);
+  --shadow-glow: 0 0 0 1px rgba(14, 159, 130, 0.25), 0 6px 18px -4px rgba(14, 159, 130, 0.25);
 
   --font-sans: "Inter", "Segoe UI", Roboto, system-ui, -apple-system, sans-serif;
-  --font-heading: "Sora", var(--font-sans);
+  --font-heading: "Plus Jakarta Sans", var(--font-sans);
 }
 
 * {
@@ -57,11 +58,7 @@ body {
   font-size: 15px;
   line-height: 1.6;
   color: var(--color-text);
-  background:
-    radial-gradient(900px 500px at 8% -10%, rgba(99, 102, 241, 0.16), transparent 60%),
-    radial-gradient(800px 500px at 100% 0%, rgba(34, 211, 238, 0.09), transparent 55%),
-    var(--color-bg);
-  background-attachment: fixed;
+  background: var(--color-bg);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -70,32 +67,26 @@ h1, h2, h3, h4 {
   margin: 0 0 0.5em;
   font-family: var(--font-heading);
   font-weight: 700;
-  letter-spacing: -0.015em;
+  letter-spacing: -0.01em;
   color: var(--color-text);
 }
 
-h1 { font-size: 2rem; }
-h2 { font-size: 1.5rem; }
-h3 { font-size: 1.2rem; }
-h4 { font-size: 1.02rem; font-weight: 600; }
+h1 { font-size: 1.9rem; }
+h2 { font-size: 1.4rem; }
+h3 { font-size: 1.15rem; }
+h4 { font-size: 1rem; font-weight: 600; }
 
 p { margin: 0 0 0.75em; color: var(--color-text); }
 
 a {
-  color: var(--color-primary-light);
+  color: var(--color-secondary-dark);
   text-decoration: none;
 }
 
-a:hover { color: var(--color-primary-light); text-decoration: underline; }
+a:hover { text-decoration: underline; }
 
 img { max-width: 100%; }
 
-::selection { background: rgba(99, 102, 241, 0.35); }
-
-/* Slim, on-brand scrollbar (Chromium/WebKit) */
-::-webkit-scrollbar { width: 10px; height: 10px; }
-::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: var(--color-border-strong); border-radius: 999px; }
-::-webkit-scrollbar-thumb:hover { background: var(--color-primary); }
+::selection { background: rgba(14, 159, 130, 0.2); }
 
 [hidden] { display: none !important; }

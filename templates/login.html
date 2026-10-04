@@ -1,32 +1,61 @@
 {% extends "base.html" %}
 {% block title %}Log in · AgentCare{% endblock %}
+{% block head %}
+<style>
+  body { background: #fff; }
+  body:has(.auth-split) .page-container { max-width: none; padding: 0; margin: 0; }
+  body:has(.auth-split) .site-footer { display: none; }
+</style>
+{% endblock %}
 {% block content %}
-<div class="auth-shell">
-  <div class="auth-card">
-    {% from "macros/logo.html" import logo %}
-    <div class="auth-logo">{{ logo(40) }}<span>AgentCare</span></div>
-    <p class="auth-subtitle">Administrative coordination for patient care.</p>
-
-    <div class="tabs" role="tablist">
-      <button type="button" class="tab{% if active_tab != 'register' %} active{% endif %}" data-tab="login">Log in</button>
-      <button type="button" class="tab{% if active_tab == 'register' %} active{% endif %}" data-tab="register">Register</button>
+{% from "macros/logo.html" import logo %}
+<div class="auth-split">
+  <div class="auth-hero">
+    <div class="auth-hero-top">
+      <div class="brand">{{ logo(26) }}<span>AgentCare</span></div>
+      <h1>Intelligent care coordination at the speed of thought.</h1>
+      <p>Free-text requests routed to the right department, real appointment slots
+         booked automatically, and every step recorded in an auditable trail.</p>
+      <div class="auth-hero-features">
+        <div class="auth-feature"><strong>Six-layer safety boundary</strong>Administrative-only by design, enforced in code, not just a prompt.</div>
+        <div class="auth-feature"><strong>Human-in-the-loop</strong>Every sensitive action and safety flag pauses for staff review.</div>
+        <div class="auth-feature"><strong>Full audit trail</strong>Every tool call and decision is written to an append-only log.</div>
+      </div>
     </div>
+    <div class="auth-hero-foot">AgentCare handles hospital administration only — it is not a medical device.</div>
+  </div>
 
-    <form method="post" action="/login" class="tab-panel{% if active_tab == 'register' %} hidden{% endif %}" data-panel="login">
-      {% if login_error %}<div class="form-error">{{ login_error }}</div>{% endif %}
-      <label>Email<input type="email" name="email" required autocomplete="username" autofocus></label>
-      <label>Password<input type="password" name="password" required autocomplete="current-password"></label>
-      <button type="submit" class="btn btn-primary btn-block">Log in</button>
-    </form>
+  <div class="auth-form-side">
+    <div class="auth-card">
+      <div class="auth-logo">{{ logo(32) }}<span>AgentCare</span></div>
+      <p class="auth-subtitle">Sign in to submit requests, manage appointments and documents.</p>
 
-    <form method="post" action="/register" class="tab-panel{% if active_tab != 'register' %} hidden{% endif %}" data-panel="register">
-      {% if register_error %}<div class="form-error">{{ register_error }}</div>{% endif %}
-      <label>Full name<input type="text" name="name" required></label>
-      <label>Email<input type="email" name="email" required autocomplete="username"></label>
-      <label>Password<input type="password" name="password" required minlength="8" autocomplete="new-password"><small>At least 8 characters</small></label>
-      <label>Phone <span class="optional">(optional)</span><input type="tel" name="phone"></label>
-      <button type="submit" class="btn btn-primary btn-block">Create account</button>
-    </form>
+      <div class="auth-demo-hint">
+        <strong>Demo logins</strong> (password <code>AgentCare!2026</code> for all):<br>
+        patient — <code>asha.menon@example.com</code> · staff — <code>staff@agentcare.local</code> · admin — <code>admin@agentcare.local</code>
+      </div>
+
+      <div class="tabs" role="tablist">
+        <button type="button" class="tab{% if active_tab != 'register' %} active{% endif %}" data-tab="login">Log in</button>
+        <button type="button" class="tab{% if active_tab == 'register' %} active{% endif %}" data-tab="register">Register</button>
+      </div>
+
+      <form method="post" action="/login" class="tab-panel{% if active_tab == 'register' %} hidden{% endif %}" data-panel="login">
+        {% if login_error %}<div class="form-error">{{ login_error }}</div>{% endif %}
+        <label>Email<input type="email" name="email" required autocomplete="username" autofocus></label>
+        <label>Password<input type="password" name="password" required autocomplete="current-password"></label>
+        <button type="submit" class="btn btn-primary btn-block">Log in</button>
+      </form>
+
+      <form method="post" action="/register" class="tab-panel{% if active_tab != 'register' %} hidden{% endif %}" data-panel="register">
+        {% if register_error %}<div class="form-error">{{ register_error }}</div>{% endif %}
+        <label>Full name<input type="text" name="name" required></label>
+        <label>Email<input type="email" name="email" required autocomplete="username"></label>
+        <label>Password<input type="password" name="password" required minlength="8" autocomplete="new-password"><small>At least 8 characters</small></label>
+        <label>Phone <span class="optional">(optional)</span><input type="tel" name="phone"></label>
+        <button type="submit" class="btn btn-primary btn-block">Create account</button>
+      </form>
+    </div>
   </div>
 </div>
 {% endblock %}

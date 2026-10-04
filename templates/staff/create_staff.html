@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% block title %}Add Staff · AgentCare{% endblock %}
 {% block content %}
+<div class="eyebrow">Access Management</div>
 <h1>Add a staff or admin account</h1>
 <form method="post" action="/staff/new-staff" class="card" style="max-width:420px;">
   <input type="hidden" name="csrf_token" value="{{ csrf_token }}">

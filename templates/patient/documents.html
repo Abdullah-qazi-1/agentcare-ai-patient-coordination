@@ -1,82 +1,94 @@
 {% extends "base.html" %}
 {% block title %}Documents · AgentCare{% endblock %}
 {% block content %}
-<h1>Documents</h1>
+<div class="eyebrow">Document Vault</div>
+<h1>Health Documents &amp; Records</h1>
+<p class="page-subtitle">Upload reports, check what's missing for a department, and request an administrative summary.</p>
 
-<div class="card">
-  <form method="post" action="/documents/upload-form" enctype="multipart/form-data" id="upload-form">
-    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
-    <label>Upload a document
-      <input type="file" name="file" required data-max-bytes="{{ max_bytes }}">
-    </label>
-    <label>Document type <span class="optional">(optional — auto-detected if left blank)</span>
-      <select name="document_type">
-        <option value="">Auto-detect</option>
-        <option value="ecg_report">ECG Report</option>
-        <option value="blood_report">Blood Report</option>
-        <option value="imaging_report">Imaging Report</option>
-        <option value="prescription_record">Prescription Record</option>
-        <option value="discharge_summary">Discharge Summary</option>
-        <option value="insurance_card">Insurance Card</option>
-        <option value="identity_proof">Identity Proof</option>
-        <option value="referral_letter">Referral Letter</option>
-        <option value="other">Other</option>
-      </select>
-    </label>
-    <div id="upload-error" class="form-error hidden"></div>
-    <button type="submit" class="btn btn-primary">Upload</button>
-  </form>
-</div>
-
-<div class="card" style="margin-top:16px;">
-  <form method="get" action="/documents">
-    <label>Check missing documents for a department
-      <select name="department_id" onchange="this.form.submit()">
-        <option value="">Select a department</option>
-        {% for d in departments %}
-        <option value="{{ d.id }}" {% if selected_department_id == d.id %}selected{% endif %}>{{ d.name }}</option>
-        {% endfor %}
-      </select>
-    </label>
-  </form>
-  {% if missing %}
-  <div class="missing-chips">
-    {% for req in missing.required %}
-      {% if req in missing.missing %}
-        <span class="chip chip--warning">{{ req | prettify }}</span>
-      {% else %}
-        <span class="chip chip--success">{{ req | prettify }}</span>
-      {% endif %}
-    {% endfor %}
-  </div>
-  {% endif %}
-</div>
-
-<h2 style="margin-top:28px;">My documents</h2>
-{% if not documents %}
-<div class="empty-state"><p>No documents uploaded yet.</p></div>
-{% else %}
-<div class="doc-cards">
-  {% for d in documents %}
-  <div class="card doc-card">
-    <div class="doc-card-header">
-      <span class="chip chip--default">{{ d.document_type | prettify }}</span>
-      {% if d.is_duplicate_of %}<span class="chip chip--warning">Duplicate of #{{ d.is_duplicate_of }}</span>{% endif %}
-    </div>
-    <div class="doc-card-name">{{ d.original_filename }}</div>
-    <div class="doc-card-meta">Confidence: {{ (d.classification_confidence * 100) | round | int }}%</div>
-    {% if d.summary %}<p class="doc-summary">{{ d.summary }}</p>{% endif %}
-    <div class="doc-card-actions">
-      <a class="btn btn-sm btn-secondary" href="/documents/{{ d.id }}/download">Download</a>
-      <form method="post" action="/documents/summarize" class="inline-form">
+<div class="with-sidebar">
+  <div>
+    <div class="card">
+      <h3>Upload a document</h3>
+      <form method="post" action="/documents/upload-form" enctype="multipart/form-data" id="upload-form">
         <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
-        <input type="hidden" name="document_id" value="{{ d.id }}">
-        <button type="submit" class="btn btn-sm btn-ghost">{{ "Re-summarize" if d.summary else "Summarize" }}</button>
+        <div class="upload-dropzone" id="upload-dropzone">
+          <strong>Drag &amp; drop a file here</strong>
+          <span class="muted" id="dropzone-filename">or click to browse — PDF, JPG, PNG up to {{ (max_bytes // (1024*1024)) }}MB</span>
+          <input type="file" name="file" id="upload-file-input" required data-max-bytes="{{ max_bytes }}" style="margin-top:14px;">
+        </div>
+        <label>Document type <span class="optional">(optional — auto-detected if left blank)</span>
+          <select name="document_type">
+            <option value="">Auto-detect</option>
+            <option value="ecg_report">ECG Report</option>
+            <option value="blood_report">Blood Report</option>
+            <option value="imaging_report">Imaging Report</option>
+            <option value="prescription_record">Prescription Record</option>
+            <option value="discharge_summary">Discharge Summary</option>
+            <option value="insurance_card">Insurance Card</option>
+            <option value="identity_proof">Identity Proof</option>
+            <option value="referral_letter">Referral Letter</option>
+            <option value="other">Other</option>
+          </select>
+        </label>
+        <div id="upload-error" class="form-error hidden"></div>
+        <button type="submit" class="btn btn-primary">Upload &amp; Analyze</button>
       </form>
     </div>
+
+    <h2 style="margin-top:28px;">My documents</h2>
+    {% if not documents %}
+    <div class="empty-state"><p>No documents uploaded yet.</p></div>
+    {% else %}
+    <div class="doc-cards">
+      {% for d in documents %}
+      <div class="card doc-card">
+        <div class="doc-card-header">
+          <span class="chip chip--default">{{ d.document_type | prettify }}</span>
+          {% if d.is_duplicate_of %}<span class="chip chip--warning">Duplicate of #{{ d.is_duplicate_of }}</span>{% endif %}
+        </div>
+        <div class="doc-card-name">{{ d.original_filename }}</div>
+        <div class="doc-card-meta">Classification confidence: {{ (d.classification_confidence * 100) | round | int }}%</div>
+        {% if d.summary %}<p class="doc-summary">{{ d.summary }}</p>{% endif %}
+        <div class="doc-card-actions">
+          <a class="btn btn-sm btn-secondary" href="/documents/{{ d.id }}/download">Download</a>
+          <form method="post" action="/documents/summarize" class="inline-form">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+            <input type="hidden" name="document_id" value="{{ d.id }}">
+            <button type="submit" class="btn btn-sm btn-ghost">{{ "Re-summarize" if d.summary else "Summarize" }}</button>
+          </form>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    {% endif %}
   </div>
-  {% endfor %}
+
+  <aside class="sidebar-card">
+    <h3>Department requirements</h3>
+    <form method="get" action="/documents">
+      <label>Check missing documents for
+        <select name="department_id" onchange="this.form.submit()">
+          <option value="">Select a department</option>
+          {% for d in departments %}
+          <option value="{{ d.id }}" {% if selected_department_id == d.id %}selected{% endif %}>{{ d.name }}</option>
+          {% endfor %}
+        </select>
+      </label>
+    </form>
+    {% if missing %}
+    <div class="missing-chips">
+      {% for req in missing.required %}
+        {% if req in missing.missing %}
+          <span class="chip chip--warning">{{ req | prettify }}</span>
+        {% else %}
+          <span class="chip chip--success">{{ req | prettify }}</span>
+        {% endif %}
+      {% endfor %}
+    </div>
+    {% else %}
+    <p class="muted">Select a department to see which document types are required and which you've already provided.</p>
+    {% endif %}
+  </aside>
 </div>
-{% endif %}
 {% endblock %}
 {% block scripts %}<script src="/static/js/upload.js"></script>{% endblock %}

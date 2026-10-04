@@ -42,3 +42,6 @@ Thumbs.db
 
 # Streamlit
 .streamlit/secrets.toml
+
+# Local design reference material (not part of the shipped app)
+ui/

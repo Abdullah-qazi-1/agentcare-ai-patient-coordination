@@ -2,41 +2,68 @@
 {% block title %}New Request · AgentCare{% endblock %}
 {% block content %}
 {% from "macros/status_chip.html" import status_chip %}
-<h1>New administrative request</h1>
+<div class="eyebrow">Triage Orchestration</div>
+<h1>Submit a Care Request</h1>
 <p class="page-subtitle">
-  Describe what you need in your own words — AgentCare handles the administrative
-  work: routing, booking, documents and reminders. It never diagnoses or advises on
-  treatment.
+  Describe your symptoms, appointment needs, or medical questions in your own words.
+  Our pipeline routes and schedules automatically — AgentCare handles the
+  administrative work only; it never diagnoses or advises on treatment.
 </p>
 
-<form method="post" action="/" class="card">
-  <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
-  <label>
-    What do you need?
-    <textarea
-      name="request_text" required minlength="3" maxlength="2000"
-      placeholder="e.g. I need a cardiology appointment next week, and I want to attach my previous ECG"
-    ></textarea>
-  </label>
-  <button type="submit" class="btn btn-primary">Submit request</button>
-</form>
+<div class="with-sidebar">
+  <div>
+    <form method="post" action="/" class="card" id="request-form">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+      <label>
+        What do you need?
+        <textarea
+          id="request-text" name="request_text" required minlength="3" maxlength="2000"
+          placeholder="e.g. I need a cardiology appointment next week, and I want to attach my previous ECG"
+        ></textarea>
+        <small><span id="char-count">0</span> / 2000 characters</small>
+      </label>
 
-{% if submit_error %}
-<div class="card result-card">
-  <div class="form-error">{{ submit_error }}</div>
-</div>
-{% elif result %}
-<div class="card result-card">
-  <div class="result-header">
-    {{ status_chip(result.status) }}
-    {% if result.awaiting_human_review %}<span class="chip chip--warning">Needs staff review</span>{% endif %}
+      <div class="quick-chips">
+        <button type="button" class="quick-chip" data-fill="I need a cardiology consultation next week for recurring chest tightness.">Cardiology consultation</button>
+        <button type="button" class="quick-chip" data-fill="I need to renew my prescription for Metformin.">Prescription renewal</button>
+        <button type="button" class="quick-chip" data-fill="I'd like a follow-up appointment after my recent procedure.">Follow-up visit</button>
+        <button type="button" class="quick-chip" data-fill="I'd like a second opinion appointment with a specialist.">Second opinion</button>
+      </div>
+
+      <button type="submit" class="btn btn-primary" id="submit-btn">Submit request</button>
+    </form>
+
+    {% if submit_error %}
+    <div class="card result-card">
+      <div class="form-error">{{ submit_error }}</div>
+    </div>
+    {% elif result %}
+    <div class="card result-card">
+      <div class="result-header">
+        {{ status_chip(result.status) }}
+        {% if result.awaiting_human_review %}<span class="chip chip--warning">Needs staff review</span>{% endif %}
+      </div>
+      <p>{{ result.summary }}</p>
+      <p class="result-meta">
+        Request #{{ result.workflow_run_id }} · Step: {{ result.current_step | prettify }}
+        {% if result.appointment_id %} · Appointment #{{ result.appointment_id }}{% endif %}
+      </p>
+      <a class="btn btn-secondary" href="/requests">View in My Requests</a>
+    </div>
+    {% endif %}
   </div>
-  <p>{{ result.summary }}</p>
-  <p class="result-meta">
-    Request #{{ result.workflow_run_id }} · Step: {{ result.current_step | prettify }}
-    {% if result.appointment_id %} · Appointment #{{ result.appointment_id }}{% endif %}
-  </p>
-  <a class="btn btn-secondary" href="/requests">View in My Requests</a>
+
+  <aside class="sidebar-card" id="pipeline-panel" hidden>
+    <h4>Pipeline progress</h4>
+    <ol class="lineage-list" id="pipeline-steps">
+      <li><div class="lineage-step">Understanding the request</div></li>
+      <li><div class="lineage-step">Routing to a department</div></li>
+      <li><div class="lineage-step">Checking appointment availability</div></li>
+      <li><div class="lineage-step">Coordinating documents</div></li>
+      <li><div class="lineage-step">Scheduling follow-up</div></li>
+      <li><div class="lineage-step">Assembling confirmation</div></li>
+    </ol>
+  </aside>
 </div>
-{% endif %}
 {% endblock %}
+{% block scripts %}<script src="/static/js/new_request.js"></script>{% endblock %}
